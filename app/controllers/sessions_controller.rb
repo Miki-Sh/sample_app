@@ -16,5 +16,8 @@ class SessionsController < ApplicationController
   end
 
   def destroy
+    log_out
+      # RailsでTurboを使うときは、303 See Otherステータスを指定することで、DELETEリクエスト後のリダイレクトが正しく振る舞うようにする必要がある
+    redirect_to root_url, status: :see_other
   end
 end
