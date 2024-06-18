@@ -59,6 +59,11 @@ class LogoutTest < Logout
     assert_redirected_to root_url
   end
 
+  test "1つのタブですでにログアウトしたのに、もう1つのタブで再度ログアウトをクリックするユーザーをシミュレートする" do
+    delete logout_path
+    assert_redirected_to root_url
+  end
+
   test "redirect after logout" do
     follow_redirect!
     assert_select "a[href=?]", login_path
