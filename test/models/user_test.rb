@@ -79,4 +79,7 @@ class UserTest < ActiveSupport::TestCase
     assert_not @user.valid?
   end
 
+  test "記憶ダイジェストを持たないユーザーの場合、authenticated?はfalseを返す" do
+    assert_not @user.authenticated?('')
+  end
 end
