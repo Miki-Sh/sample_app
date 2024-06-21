@@ -4,6 +4,7 @@ class UsersEditTest < ActionDispatch::IntegrationTest
 
   def setup
     @user = users(:michael)
+    @other_user = users(:archer)
   end
 
   test "ユーザー編集失敗" do
@@ -39,5 +40,19 @@ class UsersEditTest < ActionDispatch::IntegrationTest
     patch user_path(@user), params: { user: { name: @user.name, email: @user.email } }
     assert_not flash.empty?
     assert_redirected_to login_url
+  end
+
+  test "間違ったユーザーでログインした時、editにリダイレクトする" do
+    log_in_as(@other_user)
+    get edit_user_path(@user)
+    assert flash.empty?
+    assert_redirected_to root_url
+  end
+
+  test "間違ったユーザーでログインした時、updateにリダイレクトする" do
+    log_in_as(@other_user)
+    patch user_path(@user), params: { user: { name: @user.name, email: @user.email } }
+    assert flash.empty?
+    assert_redirected_to root_url
   end
 end
