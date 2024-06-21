@@ -13,7 +13,7 @@ class InvalidPasswordTest < UsersLogin
     assert_template 'sessions/new'
   end
 
-  test "login with valid email/invalid password" do
+  test "有効なemail/無効なpasswordでログイン" do
     post login_path, params: { session: { email: @user.email, password: "invalid" } }
     assert_not is_logged_in?
     assert_template 'sessions/new'
@@ -31,12 +31,12 @@ class ValidLogin < UsersLogin
 end
 
 class ValidLoginTest < ValidLogin
-  test "valid login" do
+  test "有効なログイン" do
     assert is_logged_in?
     assert_redirected_to @user
   end
 
-  test "redirect after login" do
+  test "ログイン後にリダイレクトする" do
     follow_redirect!
     assert_template 'users/show'
     assert_select "a[href=?]", login_path, count: 0
@@ -53,7 +53,7 @@ class Logout < ValidLogin
 end
 
 class LogoutTest < Logout
-  test "successful logout" do
+  test "ログアウト成功する" do
     assert_not is_logged_in?
     assert_response :see_other
     assert_redirected_to root_url
@@ -64,7 +64,7 @@ class LogoutTest < Logout
     assert_redirected_to root_url
   end
 
-  test "redirect after logout" do
+  test "ログアウト後にリダイレクトする" do
     follow_redirect!
     assert_select "a[href=?]", login_path
     assert_select "a[href=?]", logout_path,      count: 0
@@ -73,12 +73,12 @@ class LogoutTest < Logout
 
   class RememberingTest < UsersLogin
 
-    test "[remember me]チェックボックスをオンにしてログイン" do
+    test "[remember me]チェックボックスをオンにしてログインする" do
       log_in_as(@user, remember_me: '1')
       assert_equal cookies[:remember_token] , assigns(:user).remember_token
     end
   
-    test "[remember me]チェックボックスをオフにしてログイン" do
+    test "[remember me]チェックボックスをオフにしてログインする" do
       # Cookieを保存してログイン
       log_in_as(@user, remember_me: '1')
       # Cookieが削除されていることを検証してからログイン

@@ -14,7 +14,7 @@ class UsersController < ApplicationController
     if @user.save
       reset_session
       log_in @user
-      flash[:success] = "Welcome to the Sample App!"
+      flash[:success] = "Sample Appへようこそ!"
       redirect_to @user
     else
       render 'new', status: :unprocessable_entity
@@ -28,7 +28,7 @@ class UsersController < ApplicationController
   def update
     @user = User.find(params[:id])
     if @user.update(user_params)
-      flash[:success] = "Profile updated"
+      flash[:success] = "プロフィールが変更されました！"
       redirect_to @user
     else
       render 'edit', status: :unprocessable_entity
@@ -46,7 +46,7 @@ class UsersController < ApplicationController
     # ログイン済みユーザーかどうか確認
     def logged_in_user
       unless logged_in?
-        flash[:danger] = "Please log in."
+        flash[:danger] = "ログインしてください"
         redirect_to login_url, status: :see_other
       end
     end

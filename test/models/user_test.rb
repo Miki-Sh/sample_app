@@ -11,31 +11,27 @@ class UserTest < ActiveSupport::TestCase
     assert @user.valid?
   end
 
-  # name属性のバリデーションに対するテスト 
-  test "name should be present" do
+  test "nameが空欄になっている" do
     @user.name = "     "
     assert_not @user.valid?
   end
 
-  # email属性の検証に対するテスト
-  test "email should be present" do
+  test "emailが空欄になっている" do
     @user.email = "     "
     assert_not @user.valid?
   end
 
-  # nameとemailの長さの検証に対するテスト
-  test "name should not be too long" do
+  test "nameが長すぎる" do
     @user.name = "a" * 51
     assert_not @user.valid?
   end
 
-  test "email should not be too long" do
+  test "emailが長すぎる" do
     @user.email = "a" * 244 + "@example.com"
     assert_not @user.valid?
   end
 
-  # 有効なメールフォーマットをテストする
-  test "email validation should accept valid addresses" do
+  test "email validationが有効なアドレスを受け入れる" do
     valid_addresses = %w[user@example.com USER@foo.COM A_US-ER@foo.bar.org
                          first.last@foo.jp alice+bob@baz.cn]
     valid_addresses.each do |valid_address|
@@ -44,8 +40,7 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
-  # 無効なメールフォーマットをテストする
-  test "email validation should reject invalid addresses" do
+  test "email validationが無効なアドレスを拒否する" do
     invalid_addresses = %w[user@example,com user_at_foo.org user.name@example.
                            foo@bar_baz.com foo@bar+baz.com]
     invalid_addresses.each do |invalid_address|
@@ -54,27 +49,25 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
-  # 重複するメールアドレス拒否のテスト
-  test "email addresses should be unique" do
+  test "重複するemailアドレスを拒否するか" do
     duplicate_user = @user.dup
     @user.save
     assert_not duplicate_user.valid?
   end
-  # メールアドレスを小文字で保存できているかのテスト
-  test "email addresses should be saved as lowercase" do
+
+  test "emailアドレスを小文字で保存しているか" do
     mixed_case_email = "Foo@ExAMPle.CoM"
     @user.email = mixed_case_email
     @user.save
     assert_equal mixed_case_email.downcase, @user.reload.email
   end
 
-  # パスワードの最小文字数のテスト
-  test "password should be present (nonblank)" do
+  test "パスワードが空文字でないことを確認できているか" do
     @user.password = @user.password_confirmation = " " * 6
     assert_not @user.valid?
   end
 
-  test "password should have a minimum length" do
+  test "passwordの最小文字数を指定できているか" do
     @user.password = @user.password_confirmation = "a" * 5
     assert_not @user.valid?
   end
