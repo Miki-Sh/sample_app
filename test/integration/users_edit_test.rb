@@ -7,6 +7,7 @@ class UsersEditTest < ActionDispatch::IntegrationTest
   end
 
   test "ユーザー編集失敗" do
+    log_in_as(@user)
     get edit_user_path(@user)
     assert_template 'users/edit'
     patch user_path(@user), params: { user: { name: "", email: "foo@invalid", password: "foo", password_confirmation: "bar" } }
@@ -15,6 +16,7 @@ class UsersEditTest < ActionDispatch::IntegrationTest
   end
 
   test "ユーザー編集成功" do
+    log_in_as(@user)
     get edit_user_path(@user)
     assert_template 'users/edit'
     name  = "Foo Bar"
@@ -25,5 +27,17 @@ class UsersEditTest < ActionDispatch::IntegrationTest
     @user.reload
     assert_equal name,  @user.name
     assert_equal email, @user.email
+  end
+
+  test "ログインしていない場合、editにリダイレクトする" do
+    get edit_user_path(@user)
+    assert_not flash.empty?
+    assert_redirected_to login_url
+  end
+
+  test "ログインしていない場合、updateにリダイレクトする" do
+    patch user_path(@user), params: { user: { name: @user.name, email: @user.email } }
+    assert_not flash.empty?
+    assert_redirected_to login_url
   end
 end
