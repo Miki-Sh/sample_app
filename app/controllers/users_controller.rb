@@ -40,6 +40,7 @@ class UsersController < ApplicationController
 
   private
 
+    # Strong Parameters(必須パラメータと許可済みパラメータを指定して、マスアサインメントの脆弱性から守る)
     def user_params
       params.require(:user).permit(:name, :email, :password, :password_confirmation)
     end
