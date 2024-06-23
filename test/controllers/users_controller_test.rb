@@ -11,12 +11,12 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "ログインしていない時、indexにリダイレクトする" do
+  test "ログインせずにindexアクションを実行すると、ログイン画面にリダイレクトする" do
     get users_path
     assert_redirected_to login_url
   end
 
-  test "ログインしていない時、updateにリダイレクトする" do
+  test "ログインせずにupdateアクションを実行するとログイン画面にリダイレクトする" do
     patch user_path(@user), params: { user: { name: @user.name, email: @user.email } }
     assert_not flash.empty?
     assert_redirected_to login_url
