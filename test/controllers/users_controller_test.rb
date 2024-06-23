@@ -28,4 +28,21 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     patch user_path(@other_user), params: { user: { password: "password", password_confirmation: "password", admin: true } }
     assert_not @other_user.reload.admin?
   end
+
+  test "ログインせずにdestroyアクションを実行すると、ログイン画面にリダイレクトする" do
+    assert_no_difference 'User.count' do
+      delete user_path(@user)
+    end
+    assert_response :see_other
+    assert_redirected_to login_url
+  end
+
+  test "管理者以外のユーザーがdestroyアクションを実行すると、ホーム画面にリダイレクトする" do
+    log_in_as(@other_user)
+    assert_no_difference 'User.count' do
+      delete user_path(@user)
+    end
+    assert_response :see_other
+    assert_redirected_to root_url
+  end
 end
