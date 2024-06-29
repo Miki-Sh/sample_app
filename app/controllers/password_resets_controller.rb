@@ -30,6 +30,7 @@ class PasswordResetsController < ApplicationController
       @user.forget   # ユーザーのリメンバーダイジェストを無効にする
       reset_session  # 現在のセッションをリセットする
       log_in @user   # 新しいセッションでユーザーをログインさせる
+      @user.update_attribute(:reset_digest, nil)
       flash[:success] = "パスワードはリセットされました"
       redirect_to @user
     else

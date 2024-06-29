@@ -88,6 +88,7 @@ class PasswordUpdateTest < PasswordResetForm
                     user: { password:              "foobaz",
                             password_confirmation: "foobaz" } }
     assert is_logged_in?
+    assert_nil @reset_user.reload.reset_digest
     assert_not flash.empty?
     assert_redirected_to @reset_user
   end
