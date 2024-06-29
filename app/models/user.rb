@@ -48,8 +48,8 @@ class User < ApplicationRecord
 
   # アカウントを有効にする
   def activate
-    update_attribute(:activated,    true)
-    update_attribute(:activated_at, Time.zone.now)
+    # update_columnsはバリデーションが実行されない上、update_attributeと異なりモデルのコールバックも行われないため、本チュートリアル以外で使用する際は注意
+    update_columns(activated: true, activated_at: Time.zone.now)
   end
 
   # 有効化用のメールを送信する
@@ -60,8 +60,7 @@ class User < ApplicationRecord
   # パスワード再設定の属性を設定する
   def create_reset_digest
     self.reset_token = User.new_token
-    update_attribute(:reset_digest,  User.digest(reset_token))
-    update_attribute(:reset_sent_at, Time.zone.now)
+    update_columns(reset_digest: User.digest(reset_token), reset_sent_at: Time.zone.now)
   end
 
   # パスワード再設定のメールを送信する
