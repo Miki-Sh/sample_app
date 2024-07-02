@@ -24,4 +24,8 @@ class MicropostTest < ActiveSupport::TestCase
     @micropost.content = "a" * 141
     assert_not @micropost.valid?
   end
+
+  test "データベース上の最初のマイクロポストが、fixture内のマイクロポストであるmost_recentと同じである" do
+    assert_equal microposts(:most_recent), Micropost.first
+  end
 end
