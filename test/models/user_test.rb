@@ -75,4 +75,12 @@ class UserTest < ActiveSupport::TestCase
   test "記憶ダイジェストを持たないユーザーの場合、authenticated?はfalseを返す" do
     assert_not @user.authenticated?(:remember, '')
   end
+
+  test "ユーザーが削除されたときに、そのユーザーに紐付いたマイクロポストも一緒に削除される" do
+    @user.save
+    @user.microposts.create!(content: "Lorem ipsum")
+    assert_difference 'Micropost.count', -1 do
+      @user.destroy
+    end
+  end
 end
