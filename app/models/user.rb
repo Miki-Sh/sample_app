@@ -1,9 +1,9 @@
 class User < ApplicationRecord
   has_many :microposts, dependent: :destroy
-  has_many :active_relationships, class_name:  "Relationship",
-                                  foreign_key: "follower_id",
-                                  dependent:   :destroy
-  has_many :following, through: :active_relationships, source: :followed  # following配列の出どころ（source）はfollowed idのコレクションである                                
+  has_many :active_relationships,  class_name: "Relationship", foreign_key: "follower_id", dependent: :destroy
+  has_many :passive_relationships, class_name: "Relationship", foreign_key: "followed_id", dependent: :destroy
+  has_many :following, through: :active_relationships,  source: :followed
+  has_many :followers, through: :passive_relationships  # :followers属性の場合、Railsが規約に沿って「followers」の単数形「follower」で自動的に外部キーfollower_idを探索するので:sourceキーは省略
   attr_accessor :remember_token, :activation_token, :reset_token
   before_save   :downcase_email
   before_create :create_activation_digest
