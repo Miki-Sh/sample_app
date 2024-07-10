@@ -46,23 +46,37 @@ class UsersController < ApplicationController
     redirect_to users_url, status: :see_other
   end
 
+  def following
+    @title = 'Following'
+    @user  = User.find(params[:id])
+    @users = @user.following.paginate(page: params[:page])
+    render 'show_follow'
+  end
+
+  def followers
+    @title = 'Followers'
+    @user  = User.find_by(params[:id])
+    @users = @user.followers.paginate(page: params[:page])
+    render 'show_follow'
+  end
+
   private
 
-    # Strong Parameters(必須パラメータと許可済みパラメータを指定して、マスアサインメントの脆弱性から守る)
-    def user_params
-      params.require(:user).permit(:name, :email, :password, :password_confirmation)
-    end
+  # Strong Parameters(必須パラメータと許可済みパラメータを指定して、マスアサインメントの脆弱性から守る)
+  def user_params
+    params.require(:user).permit(:name, :email, :password, :password_confirmation)
+  end
 
-    # beforeフィルタ
+  # beforeフィルタ
 
-    # 正しいユーザーかどうか確認
-    def correct_user
-      @user = User.find(params[:id])
-      redirect_to(root_url, status: :see_other) unless current_user?(@user)
-    end
+  # 正しいユーザーかどうか確認
+  def correct_user
+    @user = User.find(params[:id])
+    redirect_to(root_url, status: :see_other) unless current_user?(@user)
+  end
 
-    # 管理者かどうか確認
-    def admin_user
-      redirect_to(root_url, status: :see_other) unless current_user.admin?
-    end
+  # 管理者かどうか確認
+  def admin_user
+    redirect_to(root_url, status: :see_other) unless current_user.admin?
+  end
 end
